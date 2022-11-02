@@ -1,0 +1,214 @@
+---
+title: "Distributions"
+author: "Heather Dye"
+date: November 11, 2022
+output:
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Distributions
+
+
+#### Definition
+
+A **random variable** $X$ takes on values determined by a random experiment. 
+For example:
+
+* Rolling a die and recording the outcome
+* Selecting a person at random from the population and recording their weight.
+* Counting the number of customers that arrive at store between 9 and 10 AM.
+
+### Distributions
+
+The **probability distribution function** $f(x)$ associated to a random variable has the following properties.
+
+* $0 \leq f(x) \leq 1$ for all $x$
+
+
+* The area under the function $f(x)$ is 1
+
+* The function $F(a)$ is called the **cumulative distribution function** or **cdf** for short.
+Note that:
+\[ F(a) = P(X \leq a).\]
+
+* A discrete distribution function has the property that
+
+
+\[ F(a) = \sum_{f(x) \neq 0, x\leq a} f(x). \]
+
+
+
+* A continuous distribution function has the property 
+that 
+\[ F(a)= \int_{- \infty} ^a f(x)dx. \]
+
+
+
+
+
+
+
+### Discrete distribution functions
+
+A discrete distribution function is called a **probability mass function** or **pmf**. 
+
+
+
+
+
+##### Example 1
+
+Let $X$ denote the outcome of the roll of a fair six sided die. 
+Then
+\[ f(x)= \begin{cases} \frac{1}{6}, & x=1,2,3,4,5,6 \\ 0, & \text{ otherwise} \end{cases} \]
+Now, the CDF is
+$$ F(a) = \begin{cases}0, & a \leq 1 \\
+\frac{1}{6}, & 1 \leq a < 2 \\
+\frac{1}{6}, & 2 \leq a < 3 \\
+\frac{3}{6}, & 3 \leq a < 4 \\
+\frac{4}{6}, & 4 \leq a< 5 \\
+\frac{5}{6}, & 5 \leq a < 6 \\
+1 , & 6 \leq a \end{cases} $$
+
+##### Example 2
+
+Let $X$ denote 
+the number of heads in sequence of 4 flips of a fair coin.
+The associated pdf is 
+
+$$f(x)= {4 \choose x} \left( \frac{1}{2} \right) ^4, \text{ for }  x \in \lbrace 1,2,3,4 \rbrace.$$
+
+#### Continuous Distributions
+
+##### Example 3 - Uniform Distribution
+Let 
+$$f(x)=\begin{cases} x/2 & 0 \leq x \leq 2 \\ 0 & \text{otherwise} \end{cases}$$
+This is a continuous distribution.
+
+##### Example 4 - Normal Distribution
+$$f(x) = \frac{1}{\sigma \sqrt{ 2 \pi}}Exp \left[ \frac{-(x-\mu)^2}{2 \sigma ^2} \right], \: -\infty < x < \infty$$
+
+
+Notice: Parameters! Different families of distributions are described by parameters.
+
+
+### Expected Value and Variance
+
+The expected value (or mean of a function) is denoted $E(X)$ or $\mu$. 
+$$E(X) = \int_{-\infty} ^{\infty} xf(x)dx $$.
+
+The population variance is denoted $Var(x)$ or $\sigma^2$
+$$ Var(X)= \int_{-\infty} ^{\infty} (x- \mu)^2f(x)dx $$.
+
+
+#### Problems:
+
+Compute the mean and variance of the distributions.
+
+
+##### Problem 1 - Uniform Distribution - Discrete
+
+Let $X$ denote the outcome of the roll of a fair six sided die. 
+Then
+\[ f(x)= \begin{cases} \frac{1}{6} \: x=1,2,3,4,5,6 \\ 0 \: \text{ otherwise} \end{cases} \]
+Now, the CDF is
+$$ F(a) = \begin{cases}0, & a \leq 1 \\
+\frac{1}{6}, & 1 \leq a < 2 \\
+\frac{1}{6}, & 2 \leq a < 3 \\
+\frac{3}{6}, & 3 \leq a < 4 \\
+\frac{4}{6}, & 4 \leq a< 5 \\
+\frac{5}{6}, & 5 \leq a < 6 \\
+1 , & 6 \leq a \end{cases} $$
+
+##### Problem 2 - Uniform Distribution - Continuous
+Let 
+$$ f(x)=\begin{cases} x/2 & 0 \leq x \leq 2 \\ 0 & \text{otherwise} \end{cases}$$
+
+
+
+### Construct a R-markdown File 
+
+
+
+
+#### Computing probabilities
+
+The normal distribution is an example of a probability density function or **pdf**. 
+
+The standard normal distribution has mean $0$ and standard deviation $1$. 
+If $X \sim N(0,1)$ then
+\[ f(x) = \frac{1}{\sqrt{2 \pi}} Exp \left( - \frac{x^2}{2} \right),\:  -\infty < x < \infty \]
+This integral requires some effort to calculate!
+We will use R to facilitate our computations.
+
+
+```{r}
+# the cdf
+pnorm(0)
+pnorm(2)
+# plot the density function
+xseq=seq(-3,3, by=0.01)
+yseq=dnorm(xseq)
+plot(xseq, yseq)
+
+# quantiles
+qseq = seq(0,1,by=0.01)
+qnorm(qseq)
+
+```
+
+
+#### Binomial Distribution
+The binomial distribution,$bin(5,0.2)$ has the pmf:
+$$ f(x)= { 5 \choose x} (0.2)^x (0.8)^{5-x}.$$
+
+```{r}
+
+pbinom(2,5,0.2)
+
+```
+
+
+### General results about distributions
+
+#### The Central Limit Theorem
+
+If $\bar{X}$ is the mean of a random sample $X_1, X_2, \ldots X_n$ of size $n$ from a distribution with a finite mean $\mu$ and a finite positive variance $\sigma^2$ then
+\[  W = \frac{\bar{X} -\mu}{\sigma / \sqrt{n} } \]
+is $N(0,1)$ in the limit as $n \rightarrow \infty$. 
+
+Note that $E[ \bar{X}] = \mu$. Similarly, 
+\[ Var \left(\bar{X} \right) = Var \left( \frac{\sum X_i}{n} \right)\]
+and
+\[ Var \left(\bar{X} \right)  = \frac{1}{n^2}Var \left( \sum X_i \right)\]
+so that:
+\[ Var \left(\bar{X} \right)= \frac{1}{n^2} \sigma^2. \]
+
+What remains to be shown is that in the limit this distribution approaches a normal distribution. This is done by computing the mgf of $\bar{X}$ and comparing with the mgf of $N(0,1)$. Usually if $n>30$ then we assume that $\bar{X}$ is approximately normal, without regard to the underlying distribution.
+
+
+#### Chebychev's Theorem
+
+If the random variable $X$ has a mean $\mu$ and a variance $\sigma$ then, for every $k\geq 1$
+\[ P( \vert X - \mu \vert \geq k \sigma ) \leq \frac{1}{k^2}. \]
+Alternate: Within $k$ standard deviations of the mean is at least $1-\frac{1}{k^2}$ of the distribution. 
+
+Proof sketch: 
+Let $A= \lbrace x : \vert x-\mu \vert \geq k \sigma \rbrace$. 
+Now, 
+\[ \sigma^2 = E[ (x-\mu)^2] = \sum (x-\mu)^2 f(x) \]
+\[  \sum (x-\mu)^2 f(x) = \sum_A (x-\mu)^2 f(x) +  \sum_{A^C} (x-\mu)^2 f(x) \]
+\[  \sigma^2 \geq \sum_A (x-\mu)^2 f(x)  . \]
+Notice that in $A$,$\vert x-\mu \vert \geq k \sigma$.
+Then, 
+\[  \sigma^2 \geq \sum_A (x-\mu)^2 f(x) \geq \sum_A k^2 \sigma^2 f(x) . \]
+
+As a result,
+\[  \sigma^2 \geq k^2 \sigma^2  \sum_A f(x) \geq k^2 \sigma^2 P(X \in A) . \]
+Then
+\[  \frac{1}{k^2} \geq P(X \in A) = P(\vert X - \mu \vert \geq k \sigma ) . \]
