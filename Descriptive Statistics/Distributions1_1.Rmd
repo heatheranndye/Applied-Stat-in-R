@@ -1,7 +1,7 @@
 ---
 title: "Distributions"
 author: "Heather Dye"
-date: November 11, 2022
+date: November 4, 2022
 output:
   pdf_document: default
 ---
