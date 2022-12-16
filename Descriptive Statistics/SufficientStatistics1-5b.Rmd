@@ -1,0 +1,105 @@
+---
+title: "Sufficient Statistics 1.5b"
+author: "Heather Dye"
+date: "12/16/2022"
+output:
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Sufficient Statistics 
+
+
+#### Definition 
+Let $X_1, X_2, \ldots X_n$  denote the r.v. with joint pdf $f(x_1, x_2, \ldots x_n)$ which depends on parameter $\theta$. Let $Y=\mu(x_1, x_2, x_3, \ldots x_n)$. The statistic $Y$ is **sufficient** for $\theta$ if and only if $f(x_1, x_2, \ldots x_n, \theta)= \phi(Y, \theta)h(x_1,x_2, \ldots x_n$.
+
+That is, if $f$ can be factorized into two parts: $\phi(Y, \theta)$ and $h(x_1,x_2, \ldots x_n)$
+
+##### Example  1
+Let $X_i \sim Pois(\lambda)$ then 
+\[ f(x_i, \lambda)= \frac{ \lambda ^x_i exp(- \lambda)}{x_i !}, x_i \geq 0. \]
+
+Then 
+\[ f(x_1, \lambda) \ldots f(x_2, \lambda) = \prod \frac{  \lambda^{x_i} exp( - \lambda)}{ x_i !}. \]
+This can be rewritten as:
+\[ ( \lambda^{n \bar{X}} exp(-n \lambda)) \frac{1}{x_1!x_2! \ldots x_n!} \]
+Hence, $\bar{X}$ is a sufficient statistics for $\lambda$. 
+
+
+##### Example 2 
+
+Let $X_i \sim Ber(p)$ then 
+\[ f(x,p)=p^x (1-p)^{1-x}, x=0,1. \]
+Let $Y=X_1 + X_2 + \ldots X_n$. Then $Y$ is sufficient for $p$:
+\[ \prod f(x_i, p) = p^{\sum x_i} (1-p)^{n - \sum x_i} = p^y (1-p)^{n-y}. \]
+Note that
+\[ P(Y=y)= { n \choose y} p^y (1-p)^{n-y} \]
+so that 
+\[ P(x_1=x_1, X_2=x_2, \ldots X_n =x_n \vert Y=y) = \frac{1}{ { n \choose y}}. \]
+Hence, if we know the value of the sufficient statistics then the probability of a specific instance is not dependent on the parameter ($p$) being estimated. 
+
+#### The Rao-Blackwell Theorem
+
+ Let $X_1, X_2, \ldots X_n$ be a random sample from a distribution with $f(x, \theta)$, $\theta \in \omega$. Let $Y_1 = \mu_1 (x_1, x_2, \ldots x_n)$ be a sufficient statistic for $\theta$. Let $Y_2$ be an unbiased estimator of 
+ $\theta$, where $Y_2$ is not a function of $Y_1$ alone. Then $E(Y_2 \vert Y_1)= \mu(Y_1)$ defines a statistic $\mu(Y_1)$, a function of the sufficient statistic $Y_1$. The sufficient statistic $\mu(Y_1)$ is an unbiased estimator and 
+ $Var(\mu (Y_1)) \leq Var(Y_2)$. 
+ 
+ 
+**NOTE:** When looking for unbiased estimators, begin with sufficient statistics. 
+
+#### Discussion: The comparison of two estimators
+
+* $\hat{\theta_1}$ and $\hat{\theta_2}$ both estimate the parameter $\theta$
+* The actual estimation error can not be computed since $\theta$ is unknown
+* The estimation error is $\hat{\theta}_i - \theta$.
+* The mean squared error is 
+\[ MSE ( \hat{ \theta}) = E_{\theta} [ ( \hat{\theta}-\theta)^2 ] = \sigma^2_{\hat{\theta}} +[ Bias( \hat{\theta } )]^2 \]
+* Note that $Bias( \hat{ \theta} ) = E[ \hat{\theta} - \theta]$ so that if $\hat{\theta}$ is unbiased then 
+$$MSE ( \hat{ \theta} ) =\sigma^2_{ \hat{\theta}} = s^2_{\hat{ \theta}}$$
+
+##### Example
+
+* Facility A produces 70% of the widgets
+* Facility B produces 30% of the widgets
+
+Goal: Select 100 widgets to determine widget life time. 
+
+##### Method 1:
+Sample 100 widgets at the packing location: $\bar{Y}$
+ 
+##### Method 2:
+Sample 70 at location A and sample 30 at location B. 
+Then $\bar{Y_{str}}= 0.7 \bar{Y_A} + 0.3 \bar{Y_b}$. 
+
+In method 1,  we apply Baye's Theorem to $\bar{Y}$ and
+\[ E[ \bar{Y}] = 0.7 E(Y \vert loc=A) + 0.3 E(Y \vert loc=B). \]
+For method 2: 
+\[ E[ \bar{Y}_{str}] = \frac{ 70 E(Y_A) + 30 E(Y_B)}{100} \]
+For both, the expected value is
+\[ 0.7 \mu_A + 0.3 \mu_B. \]
+
+Hence, both methods result in an unbiased estimator. 
+
+So we consider the MSE
+
+For $\bar{Y}$:
+\[ \sigma^2 = Var(Y) = E(Y^2)- \mu^2 \]
+Then 
+\[ Var(\bar{Y}) = 0.7 E(Y^2 \vert loc=A) +0.3 E(Y^2 \vert loc =B)
+- ( 0.7 \mu_A + 0.3 \mu_B)^2 \]
+\[ = 0.7 ( \sigma_A ^2 + \mu_A^2) + 0.3 ( \sigma_B^2 + \mu_B^2) 
+- (0.7^2 \mu_A ^2 + 0.3^2 \mu_B + 2 (0.7)(0.3) \mu_A \mu_B) \]
+
+In method 2: 
+\[ Var(Y_{str}) =Var(0.7 \bar{Y}_A + 0.3 \bar{Y}_B). \]
+Simplifying:
+\[  Var(Y_{str}) = 0.7^2 Var(\bar{Y}_A) + 0.3^2 Var(\bar{Y}_B) .  \]
+and substituting
+\[  Var(Y_{str}) = 0.7^2 \frac{\sigma_A^2}{70} + 0.3^2 \frac{\sigma_B ^2}{30}  .  \]
+
+Note that $Var(\bar{X})= \frac{Var(X)}{n}$, so this reduces to 
+\[ 0.7 \frac{\sigma_A^2}{100} + 0.3 \frac{\sigma_B ^2}{100}  .  \]
+Hence, $MSE(\bar{Y}_{str}) \leq MSE(\bar{Y})$.

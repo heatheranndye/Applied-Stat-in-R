@@ -1,0 +1,92 @@
+---
+title: 'Unbiased Estimators - 1.5a'
+author: "Heather Ann Dye"
+date: "12/16/2022"
+output:
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Unbiased Estimators
+
+We can use both the method of moments or the MLE to estimate a parameter. Which is better? 
+
+
+
+
+##### Example 1: Unbiased estimator
+
+An **unbiased estimator** has the property that $E(\hat{\theta})=\theta$ where
+$\hat{\theta}$ is an estimate of $\theta$. 
+
+Let $X_i$ be a sample of size $n$ from a population with mean $\mu$. 
+We estimate $\mu$:
+\[ \hat{\mu}(x_1,x_2, \ldots x_n) = \frac{ \sum x_i}{n}. \]
+
+This is an unbiased estimator since 
+\[ E(\hat{\mu} ) = \frac{1}{n} E( \sum x_i) = \mu. \]
+
+##### Example 2: Biased Estimator
+
+Let $X_i$ be a sample of size $n$ drawn from a population with mean $0$ and variance $\sigma^2$. 
+We compute
+\[  E \left( \frac{ \sum (x_i - \bar{x})^2}{n} \right) \neq \sigma^2.\]
+
+That is, this is a biased estimate of $\sigma^2$. 
+The value 
+\[  E \left( \frac{ \sum (x_i - \bar{x})^2}{n-1} \right) \]
+is an unbiased estimate. 
+
+
+##### Example 3: Simulation
+
+In the following simulation, we can see that the population 
+variance formula under estimates the variance. 
+
+
+```{r}
+mysample<-rnorm(3000)
+mysample<-data.frame(matrix(data=mysample, nrow =30, ncol=100))
+mymeans<-sapply(mysample, mean)
+hist(mymeans)
+mean(mymeans)
+
+
+popvar<-function(myvec){sum((myvec-mean(myvec))^2)/length(myvec)}
+
+popvar(c(2,3,5))
+
+
+mypvar<-sapply(mysample, popvar)
+hist(mypvar)
+mean(mypvar)
+mysamplesd<-sapply(mysample, sd)
+mysamplevar<-(mysamplesd)^2
+
+hist(mysamplevar)
+mean(mysamplevar)
+```
+
+
+### Calculating the amount of error in the estimated parameter
+
+To determine the amount of error in the estimate, $\hat{\theta}$, we calculate the estimated standard error, denoted as $s_{\hat{\theta}}$. 
+
+##### Example 
+For $i \in \lbrace 1, 2 \rbrace$, we denote the sample mean as $\bar{X_i}$ and the sample size as $n_i$. Let  $\mu_i$ and  $\sigma_i^2$ denote the population mean and variance respectively. 
+
+Now, $\bar{X_1} + \bar{X_2}$ is an unbiased estimator since
+$E(      \bar{X_1} + \bar{X_2}) = E(\bar{X_1}) + E(\bar{X_2}).$
+
+The standard error of this estimate is:
+\[ \sqrt{ Var(\bar{X_1} + \bar{X_2} )} = \sqrt{ Var(\bar{X_1}) + Var(\bar{X_2} )} =
+\sqrt{ \frac{\sigma_1 ^2}{n_1} + \frac{\sigma_2 ^2 }{n_2} }. \]
+
+The estimated standard error utilizes sample variance and is
+\[ SE ( \bar{X_1} + \bar{X_2}) = \sqrt{ \frac{s_1 ^2}{n_1} + \frac{s_2 ^2 }{n_2} }. \] 
+
+
+
