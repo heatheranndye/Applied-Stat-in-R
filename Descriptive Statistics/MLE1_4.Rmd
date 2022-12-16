@@ -1,0 +1,134 @@
+---
+title: "Maximum Likelihood Estimation 1.4"
+author: "Heather Ann Dye"
+date: "11/15/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##  Maximum Likelihood Estimation 1.4
+
+We have a population and know that population has a particular distribution: normal, uniform, exponential. However, we do not know the specific parameters. 
+
+##### Example 1
+
+The height of adult men in the US is normally distributed. We do not know the mean $\mu$ or the variance $\sigma^2$ and can not identify the specific function modeling the population. 
+
+
+##### Example 2
+
+Consider data from an exponential distribution. The parameter $\theta$ determines which exponential distribution. The parameter $\theta$ is greater than zero, so the parameter space consists of all reals greater then zero. 
+
+In general, we say that
+the distribution depends on $\theta$, an element of the parameter space $\Omega$.  
+
+We repeat our random experiment $n$ times to draw a sample:
+\[ X_1, X_2, \ldots X_n. \]
+
+We calculate the statistic $\mu(x_1,x_2, \ldots x_n)$ to estimate the parameter $\theta$. This is the **point estimate**.
+
+### Method 1: Maximum Likelihood Estimators
+
+Maximum likelihood estimators maximize the value of the probability density function for the given sample. That is, the likelihood of the sample is maximized by the calculated parameter. 
+
+
+##### Example 3
+
+A population is described by a Bernoulli trial ($Bin(1,p)$) with the 
+distribution
+\[ P(X=x) = f(x) = p^x (1-p)^{1-x}, \: x=0,1. \] 
+
+If we repeat the experiment $n$ times, then
+\[ P(X_1=a_1, X_2=a_2, \ldots X_n = a_n)= p^{\sum a_i} (1-p)^{n-\sum a_i}. \]
+
+Since $p$ is unknown, the likelihood function is
+\[ L(p) = p^{\sum a_i} (1-p)^{n-\sum a_i}. \]
+From the sample, we know that $X_i = a_i$ (constants) and the only variable in $L(p)$ is $p$:
+\[ L(p) =p^{ ( \sum\nolimits a_i)} (1-p)^{n-  \sum a_i}. \] 
+
+We choose $p$ so that $L(p)$ is maximized; our sample has the largest possible probability. 
+We follow the maximization technique from Calculus 1 (take the derivative). 
+\[ L'(p) =(\sum a_i) p^{ (\sum a_i) -1} (1-p)^{n-\sum a_i} - [n -\sum a_i]  p^{ (\sum a_i) -1} (1-p)^{(n-1) -\sum a_i}. \]
+Now,
+\[ L'(p) =0 \]
+when
+\[ \frac{\sum a_i}{p} - \frac{(n - \sum a_i)}{1-p} =0 \]
+or 
+\[ p = \frac{\sum a_i}{n}. \]
+Note that there is a special case if $\sum a_i = 0$ or $\sum a_i =n$. 
+
+#### Definition
+
+Maximum likelihood estimates have the form:
+\[ L( \theta )= \Pi f(x_i, \theta). \]
+We maximize $L( \theta )$ with respect to $\theta$.
+Then we substitute in values for the $X_i$ from the sample. 
+
+* Note that $Log(L(\theta))$ and $L( \theta)$ have maximums at the same values of $\theta$. 
+* It is easier to calculate the maximum of $Log(L(\theta))$. 
+* The value $Log(L(\theta))$ is usually written as $LL(\theta)$.
+
+##### Example 4
+Let $X_i \sim Exp(\theta)$. The exponential pdf has the form 
+\[ f(x)= \frac{1}{\theta} Exp \left(  \frac{-x}{\theta} \right), \: 0 \leq x < \infty. \]
+We draw a sample of size $n$ then the maximum likelihood function is:
+\[ L(\theta)= \frac{1}{\theta^n} Exp \left( \frac{-\sum x_i}{\theta} \right). \]
+The Log likelihood function is:
+\[ LL(\theta) =Log(L(\theta)) =Log\left( \frac{1}{\theta^n}\right) - \frac{\sum x_i}{\theta}. \]
+
+The derivative of $LL( \theta)$:
+\[ LL'(\theta) = \frac{-n}{\theta} + \frac{ \sum x_i}{\theta^2}. \]
+If $LL'(\theta)  =0$ then 
+\[ \theta = \frac{ \sum x_i}{n}. \]
+Note that 
+\[ LL''(\theta) = \frac{n}{\theta^2} + \frac{ -2 \sum x_i}{\theta^3} \]
+so that 
+\[ LL' \left( \frac{ \sum x_i}{n} \right) = \frac{n^3}{ (\sum x_i)^2} - 2 \frac{n^3}{ ( \sum x_i)^2} <0. \]
+
+##### Problem 
+Given the following five item sample, estimate $\theta$.
+We use the formula just derived to estimate $\theta$.
+\[ 3,4,4,1,2 \]
+```{r}
+mydata<-c(3,4,4,1,2)
+mean(mydata)
+```
+
+
+### Estimator Method 2: Method of Moments
+
+Suppose that the pdf of the distribution is known and $E(x) = \mu$ and $Var(X)=\sigma^2$. Then, we can set the distribution estimate (from the sample) equal to the theoretical moment and solve for the parameter. 
+
+##### Example 5
+Let $X_i$ have the distribution
+\[ f(x, \theta) = \theta x^{\theta -1}, \text{for} \: 0 \leq x < 1, 0 \leq \theta < \infty. \]
+We calculate that
+\[ E(x) = \int_0 ^1 x \theta x^{\theta -1 } dx = \int_0 ^ 1 \theta x^{\theta}dx. \]
+Then
+\[ E(x) = \frac{\theta}{ \theta +1}. \]
+But $E(x)$ is the mean and is estimated by $\bar{x}$. 
+Equating the two estimates:
+\[ \bar{x} = \frac{\theta}{ \theta +1}. \]
+We can solve to determine our estimated value of $\theta$:
+\[ \tilde{\theta} = \frac{ \bar{x}}{1-\bar{x}}. \]
+
+##### Problem 
+
+Using the data and the formula that we derived, estimate $\tilde{ \theta}$.
+
+X | Frequency
+--|-----
+0 | 5
+1/4 | 3
+1/2 | 10
+3/4 | 9
+
+
+```{r}
+mydata2<-c( rep(0,5), rep(1/4,3), rep(1/2, 10), rep(3/4, 9))
+mean(mydata2)/(1 -mean(mydata2))
+```
+
